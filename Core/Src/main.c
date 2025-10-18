@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "bno085_runner.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -103,8 +103,12 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
+  // Initialize BNO085.
+  bno085_reset();
+  bno085_init();
+
+  while (1) {
+    bno085_run(); // BNO085 process.
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
