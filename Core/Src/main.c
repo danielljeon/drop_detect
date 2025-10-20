@@ -108,7 +108,9 @@ int main(void)
   MX_SPI1_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-
+  // Initialize BNO085.
+  bno085_reset();
+  bno085_init();
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -149,12 +151,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  // Initialize BNO085.
-  bno085_reset();
-  bno085_init();
-
   while (1) {
-    bno085_run(); // BNO085 process.
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -384,8 +381,8 @@ void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
   /* Infinite loop */
-  for(;;)
-  {
+  for (;;) {
+    bno085_run(); // BNO085 process.
     osDelay(1);
   }
   /* USER CODE END 5 */
