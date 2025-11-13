@@ -96,7 +96,9 @@ static void start_reports() {
   for (int n = 0; n < ARRAY_LEN(sensor_config); n++) {
     const int status = sh2_setSensorConfig(sensor_config[n].sensorId,
                                            &sensor_config[n].config);
-    if (status != SH2_OK) { sh2_error_handler(status); }
+    if (status != SH2_OK) {
+      sh2_error_handler(status);
+    }
   }
 }
 
@@ -107,8 +109,10 @@ static void general_event_handler(void *cookie, sh2_AsyncEvent_t *pEvent) {
   (void)cookie; // Unused.
 
   // If we see a reset, set a flag so that sensors will be reconfigured.
-  if (pEvent->eventId == SH2_RESET) { reset_occurred = true; } else if (
-    pEvent->eventId == SH2_SHTP_EVENT) {
+  if (pEvent->eventId == SH2_RESET) {
+    reset_occurred = true;
+
+  } else if (pEvent->eventId == SH2_SHTP_EVENT) {
     // TODO: IMPLEMENT EVENT HANDLER pEvent->shtpEvent.
 
   } else if (pEvent->eventId == SH2_GET_FEATURE_RESP) {
@@ -139,6 +143,7 @@ static void sensor_report_handler(void *cookie, sh2_SensorEvent_t *pEvent) {
     bno085_game_quaternion_j = value.un.gameRotationVector.j;
     bno085_game_quaternion_k = value.un.gameRotationVector.k;
     bno085_game_quaternion_real = value.un.gameRotationVector.real;
+    break;
   case SH2_GYROSCOPE_CALIBRATED:
     bno085_gyro_x = value.un.gyroscope.x;
     bno085_gyro_y = value.un.gyroscope.y;
@@ -172,7 +177,9 @@ void bno085_init(void) {
 
   // Open SH2 interface (also registers non-sensor event handler.)
   const int status = sh2_open(sh2_hal_instance, general_event_handler, NULL);
-  if (status != SH2_OK) { sh2_error_handler(status); }
+  if (status != SH2_OK) {
+    sh2_error_handler(status);
+  }
 
   // Register sensor listener.
   sh2_setSensorCallback(sensor_report_handler, NULL);
