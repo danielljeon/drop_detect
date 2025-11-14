@@ -21,36 +21,14 @@ sensor_config_t sensor_config[SH2_MAX_SENSOR_ID] = {
     // Calibrated gyroscope data.
     // 200 Hz.
     {SH2_GYROSCOPE_CALIBRATED, {.reportInterval_us = 5000}},
-
-    // Linear acceleration minus/isolated from the gravitational component.
-    // 200 Hz.
-    {SH2_LINEAR_ACCELERATION, {.reportInterval_us = 5000}},
-
-    // Fused orientation quaternion.
-    // 200 Hz.
-    {SH2_GAME_ROTATION_VECTOR, {.reportInterval_us = 5000}},
-
-    // Gravity vector for orientation.
-    // 50 Hz.
-    {SH2_GRAVITY, {.reportInterval_us = 20000}},
 };
 
-float bno085_game_quaternion_i = 0;
-float bno085_game_quaternion_j = 0;
-float bno085_game_quaternion_k = 0;
-float bno085_game_quaternion_real = 0;
 float bno085_gyro_x = 0;
 float bno085_gyro_y = 0;
 float bno085_gyro_z = 0;
 float bno085_accel_x = 0;
 float bno085_accel_y = 0;
 float bno085_accel_z = 0;
-float bno085_lin_accel_x = 0;
-float bno085_lin_accel_y = 0;
-float bno085_lin_accel_z = 0;
-float bno085_gravity_x = 0;
-float bno085_gravity_y = 0;
-float bno085_gravity_z = 0;
 
 /** Private variables. ********************************************************/
 
@@ -138,12 +116,6 @@ static void sensor_report_handler(void *cookie, sh2_SensorEvent_t *pEvent) {
   // double timestamp_sec = (double)value.timestamp / 1000000.0;
 
   switch (value.sensorId) {
-  case SH2_GAME_ROTATION_VECTOR:
-    bno085_game_quaternion_i = value.un.gameRotationVector.i;
-    bno085_game_quaternion_j = value.un.gameRotationVector.j;
-    bno085_game_quaternion_k = value.un.gameRotationVector.k;
-    bno085_game_quaternion_real = value.un.gameRotationVector.real;
-    break;
   case SH2_GYROSCOPE_CALIBRATED:
     bno085_gyro_x = value.un.gyroscope.x;
     bno085_gyro_y = value.un.gyroscope.y;
@@ -153,16 +125,6 @@ static void sensor_report_handler(void *cookie, sh2_SensorEvent_t *pEvent) {
     bno085_accel_x = value.un.accelerometer.x;
     bno085_accel_y = value.un.accelerometer.y;
     bno085_accel_z = value.un.accelerometer.z;
-    break;
-  case SH2_LINEAR_ACCELERATION:
-    bno085_lin_accel_x = value.un.linearAcceleration.x;
-    bno085_lin_accel_y = value.un.linearAcceleration.y;
-    bno085_lin_accel_z = value.un.linearAcceleration.z;
-    break;
-  case SH2_GRAVITY:
-    bno085_gravity_x = value.un.gravity.x;
-    bno085_gravity_y = value.un.gravity.y;
-    bno085_gravity_z = value.un.gravity.z;
     break;
   default: // Handle unknown sensor reports.
     break;
