@@ -56,6 +56,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
         Core/Src/bno085_runner.c
         Core/Src/callbacks.c
         Core/Src/sh2_hal_spi.c
+        Core/Src/ws2812b_hal_pwm.c
 )
 
 # Add include paths

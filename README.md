@@ -51,20 +51,21 @@ course (firmware).
 <details markdown="1">
   <summary>Pin & Peripherals Table</summary>
 
-| STM32L432KC | Peripheral              | Config                | Connection                       | Notes                     |
-|-------------|-------------------------|-----------------------|----------------------------------|---------------------------|
-| PB3         | `SYS_JTDO-SWO`          |                       | Onboard ST-Link                  |                           |
-| PA14        | `SYS_JTCK-SWCLK`        |                       | Onboard ST-Link                  |                           |
-| PA13        | `SYS_JTMS-SWDIO`        |                       | Onboard ST-Link                  |                           |
-|             | `TIM2_CH1`              | PWM no output         |                                  | BNO085 SH2 driver timer.  |
-| PA5         | `SPI1_SCK`              |                       | BNO085 Pin 19: `H_SCL/SCK/RX`    |                           |
-| PA4         | `GPIO_Output` (SPI1 CS) | Set high              | BNO085 Pin 18: `H_CSN`           |                           |
-| PA6         | `SPI1_MISO`             |                       | BNO085 Pin 20: `H_SDA/H_MISO/TX` |                           |
-| PA7         | `SPI1_MOSI`             |                       | BNO085 Pin 17: `SA0/H_MOSI`      |                           |
-| PB0         | `GPIO_EXTI0`            | Pull-up, falling edge | BNO085 Pin 14: `H_INTN`          |                           |
-| PB1         | `GPIO_Output`           | Set high              | BNO085 Pin 6: `PS0/Wake`         | Pull low to trigger wake. |
-|             |                         | Hardware pull-up      | BNO085 Pin 5: `PS1`              |                           |
-| PA1         | `GPIO_Output`           | Set high              | BNO085 Pin 11: `NRST`            | Pull low to reset.        |
+| STM32L432KC | Peripheral              | Config                | Connection                       | Notes                                 |
+|-------------|-------------------------|-----------------------|----------------------------------|---------------------------------------|
+| PB3         | `SYS_JTDO-SWO`          |                       | Onboard ST-Link                  |                                       |
+| PA14        | `SYS_JTCK-SWCLK`        |                       | Onboard ST-Link                  |                                       |
+| PA13        | `SYS_JTMS-SWDIO`        |                       | Onboard ST-Link                  |                                       |
+|             | `TIM2_CH1`              | PWM no output         |                                  | BNO085 SH2 driver timer.              |
+| PA5         | `SPI1_SCK`              |                       | BNO085 Pin 19: `H_SCL/SCK/RX`    |                                       |
+| PA4         | `GPIO_Output` (SPI1 CS) | Set high              | BNO085 Pin 18: `H_CSN`           |                                       |
+| PA6         | `SPI1_MISO`             |                       | BNO085 Pin 20: `H_SDA/H_MISO/TX` |                                       |
+| PA7         | `SPI1_MOSI`             |                       | BNO085 Pin 17: `SA0/H_MOSI`      |                                       |
+| PB0         | `GPIO_EXTI0`            | Pull-up, falling edge | BNO085 Pin 14: `H_INTN`          |                                       |
+| PB1         | `GPIO_Output`           | Set high              | BNO085 Pin 6: `PS0/Wake`         | Pull low to trigger wake.             |
+|             |                         | Hardware pull-up      | BNO085 Pin 5: `PS1`              |                                       |
+| PA1         | `GPIO_Output`           | Set high              | BNO085 Pin 11: `NRST`            | Pull low to reset.                    |
+| PA8         | `TIM1_CH1`              | PWM Generation CH1    | WS2812B Pin: `DIN`               | DIN pin number depends on IC variant. |
 
 </details>
 
