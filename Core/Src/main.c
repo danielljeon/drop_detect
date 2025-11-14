@@ -23,6 +23,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "bno085_runner.h"
+#include "drop_detect.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -56,6 +57,13 @@ const osThreadAttr_t defaultTask_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
+/* Definitions for dropDetect */
+osThreadId_t dropDetectHandle;
+const osThreadAttr_t dropDetect_attributes = {
+  .name = "dropDetect",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityAboveNormal,
+};
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -68,6 +76,7 @@ static void MX_SPI1_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_TIM1_Init(void);
 void StartDefaultTask(void *argument);
+void StartDropDetect(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -139,6 +148,9 @@ int main(void)
   /* Create the thread(s) */
   /* creation of defaultTask */
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+
+  /* creation of dropDetect */
+  dropDetectHandle = osThreadNew(StartDropDetect, NULL, &dropDetect_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -464,6 +476,24 @@ void StartDefaultTask(void *argument)
     osDelay(1);
   }
   /* USER CODE END 5 */
+}
+
+/* USER CODE BEGIN Header_StartDropDetect */
+/**
+* @brief Function implementing the dropDetect thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartDropDetect */
+void StartDropDetect(void *argument)
+{
+  /* USER CODE BEGIN StartDropDetect */
+  /* Infinite loop */
+  for (;;) {
+    compute_drop_detect(); // Compute and check for drop state.
+    osDelay(5);
+  }
+  /* USER CODE END StartDropDetect */
 }
 
 /**

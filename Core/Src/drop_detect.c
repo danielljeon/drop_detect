@@ -1,0 +1,102 @@
+/*******************************************************************************
+ * @file drop_detect.c
+ * @brief IMU based drop detection compute and state machine.
+ *******************************************************************************
+ */
+
+/** Includes. *****************************************************************/
+
+#include "drop_detect.h"
+#include "bno085_runner.h"
+#include "ws2812b_hal_pwm.h"
+#include <math.h>
+#include <stdbool.h>
+
+/** Definitions. **************************************************************/
+
+#define G_CONSTANT 9.80665f     // m/s^2.
+#define FREEFALL_G_THRESH 0.25f // < 0.25 g means possible free-fall.
+#define IMPACT_G_THRESH 3.5f    // > 3.5 g means impact detected.
+#define EXIT_G_THRESH 0.40f     // Cancels candidate if above.
+#define MIN_FREE_FALL_SAMPLES 4 // 4 samples at 200 Hz = 20 ms.
+
+/** Private types. ************************************************************/
+
+typedef enum {
+  FREE_FALL_IDLE = 0,
+  FREE_FALL_LATCHED = 1,
+  IMPACT_LANDED = 2,
+} free_fall_state_t;
+
+/** Private variables. ********************************************************/
+
+static free_fall_state_t detect_state = FREE_FALL_IDLE;
+static int low_g_count = 0;
+
+/** Public functions. *********************************************************/
+
+void compute_drop_detect(void) {
+  const float a_mag = sqrtf(
+      bno085_accel_x * bno085_accel_x + bno085_accel_y * bno085_accel_y +
+      bno085_accel_z * bno085_accel_z); // Acceleration magnitude in m/s^2.
+
+  const float g_mag = a_mag / G_CONSTANT; // Convert m/s^2 to gs.
+
+  bool accel_low = false;
+
+  // State machine switch case.
+  switch (detect_state) {
+
+  case FREE_FALL_IDLE:
+    // Active potential free-falling condition candidate (low acceleration).
+    accel_low = g_mag < FREEFALL_G_THRESH;
+
+    // Acceleration within (positive) detection margins.
+    if (accel_low) {
+      low_g_count++;
+
+      // Detection instances surpass positive detection count.
+      if (low_g_count >= MIN_FREE_FALL_SAMPLES) {
+
+        // Fall now detected.
+#ifdef DROP_DETECT_USE_STATUS_LED
+        ws2812b_set_colour(0, 3, 0, 0); // Red.
+        ws2812b_update();
+#endif
+
+        detect_state = FREE_FALL_LATCHED; // Enable next state.
+      }
+
+    } else {
+      // Acceleration outside detection margins (negative condition).
+      // Reset detection instance counter.
+      low_g_count = 0;
+    }
+    break;
+
+  case FREE_FALL_LATCHED:
+
+    // Impact detection.
+    if (g_mag > IMPACT_G_THRESH) {
+
+#ifdef DROP_DETECT_USE_STATUS_LED
+      ws2812b_set_colour(0, 0, 3, 0); // Green.
+      ws2812b_update();
+#endif
+
+      detect_state = IMPACT_LANDED;
+    }
+
+    break;
+
+  case IMPACT_LANDED:
+
+    // Hold state until manually reset.
+    break;
+
+  default:
+    detect_state = FREE_FALL_IDLE;
+    low_g_count = 0;
+    break;
+  }
+}
