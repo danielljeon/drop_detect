@@ -66,6 +66,7 @@ course (firmware).
 |             |                         | Hardware pull-up      | BNO085 Pin 5: `PS1`              |                                       |
 | PA1         | `GPIO_Output`           | Set high              | BNO085 Pin 11: `NRST`            | Pull low to reset.                    |
 | PA8         | `TIM1_CH1`              | PWM Generation CH1    | WS2812B Pin: `DIN`               | DIN pin number depends on IC variant. |
+| PA2         | `GPIO_Output`           | Pull-down, set low    | GPIO                             | General trigger pin, active high.     |
 
 </details>
 
