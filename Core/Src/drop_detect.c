@@ -19,6 +19,7 @@
 #define IMPACT_G_THRESH 3.5f    // > 3.5 g means impact detected.
 #define EXIT_G_THRESH 0.40f     // Cancels candidate if above.
 #define MIN_FREE_FALL_SAMPLES 4 // 4 samples at 200 Hz = 20 ms.
+#define MIN_RESET_SAMPLES 20    // 20 samples at 200 Hz = 100 ms.
 
 /** Private types. ************************************************************/
 
@@ -26,12 +27,14 @@ typedef enum {
   FREE_FALL_IDLE = 0,
   FREE_FALL_LATCHED = 1,
   IMPACT_LANDED = 2,
+  DROP_DETECT_RESET = 3
 } free_fall_state_t;
 
 /** Private variables. ********************************************************/
 
 static free_fall_state_t detect_state = FREE_FALL_IDLE;
 static int low_g_count = 0;
+static int trigger_count = 0;
 
 /** Public functions. *********************************************************/
 
@@ -78,10 +81,6 @@ void compute_drop_detect(void) {
     break;
 
   case FREE_FALL_LATCHED:
-
-    // Trigger GPIO low.
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
-
     // Impact detection.
     if (g_mag > IMPACT_G_THRESH) {
 
@@ -93,16 +92,34 @@ void compute_drop_detect(void) {
       detect_state = IMPACT_LANDED;
     }
 
+    // Check for drop detect full system reset condition.
+    trigger_count++;
+    if (trigger_count >= MIN_RESET_SAMPLES) {
+      detect_state = DROP_DETECT_RESET;
+    }
+
     break;
 
   case IMPACT_LANDED:
+    // TODO: Logic here.
 
-    // Hold state until manually reset.
+    // Move to reset.
+    detect_state = DROP_DETECT_RESET;
+
+    break;
+
+  case DROP_DETECT_RESET:
+    // Trigger GPIO low.
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
+
+    trigger_count = 0;
+    low_g_count = 0;
+    detect_state = FREE_FALL_IDLE;
     break;
 
   default:
-    detect_state = FREE_FALL_IDLE;
     low_g_count = 0;
+    detect_state = FREE_FALL_IDLE;
     break;
   }
 }
