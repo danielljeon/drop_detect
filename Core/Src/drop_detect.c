@@ -63,7 +63,8 @@ void compute_drop_detect(void) {
 
         // Fall now detected.
         // Trigger GPIO high.
-        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(DROP_DETECT_GPIO_PORT, DROP_DETECT_GPIO_PIN,
+                          GPIO_PIN_SET);
 
 #ifdef DROP_DETECT_USE_STATUS_LED
         ws2812b_set_colour(0, 3, 0, 0); // Red.
@@ -110,7 +111,8 @@ void compute_drop_detect(void) {
 
   case DROP_DETECT_RESET:
     // Trigger GPIO low.
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(DROP_DETECT_GPIO_PORT, DROP_DETECT_GPIO_PIN,
+                      GPIO_PIN_RESET);
 
     trigger_count = 0;
     low_g_count = 0;
