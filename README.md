@@ -73,16 +73,12 @@ course (firmware).
 ### 1.4 Clock Configurations
 
 ```
-16 MHz High Speed External (HSI)
-↓
-Phase-Locked Loop Main (PLLM)
-↓
-80 MHz SYSCLK
-↓
-80 MHz HCLK
-↓
- → 80 MHz APB1 (Maxed) → 80 MHz APB1 Timer
- → 80 MHz APB2 (Maxed) → 80 MHz APB2 Timer
+8 MHz High Speed External (HSE)
+ -> Phase-Locked Loop Main (PLLM)
+ -> 80 MHz SYSCLK
+ -> 80 MHz HCLK
+     -> 80 MHz APB1 (Maxed) -> 80 MHz APB1 Timer
+     -> 80 MHz APB2 (Maxed) -> 80 MHz APB2 Timer
 ```
 
 ---
