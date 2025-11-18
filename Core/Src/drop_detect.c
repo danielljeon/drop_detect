@@ -20,14 +20,17 @@
 #define EXIT_G_THRESH 0.40f     // Cancels candidate if above.
 #define MIN_FREE_FALL_SAMPLES 4 // 4 samples at 200 Hz = 20 ms.
 #define MIN_RESET_SAMPLES 20    // 20 samples at 200 Hz = 100 ms.
+#define TICKS_TILL_RESET 400    // 400 samples at 200 Hz = 2000 ms = 2 s.
 
 /** Private types. ************************************************************/
 
 typedef enum {
   FREE_FALL_IDLE = 0,
   FREE_FALL_LATCHED = 1,
-  IMPACT_LANDED = 2,
-  DROP_DETECT_RESET = 3
+  FREE_FALL_DELATCH = 2,
+  PENDING_IMPACT = 3,
+  IMPACT_LANDED = 4,
+  DROP_DETECT_RESET = 5,
 } free_fall_state_t;
 
 /** Private variables. ********************************************************/
@@ -35,6 +38,7 @@ typedef enum {
 static free_fall_state_t detect_state = FREE_FALL_IDLE;
 static int low_g_count = 0;
 static int trigger_count = 0;
+static int pending_reset_count = 0;
 
 /** Public functions. *********************************************************/
 
@@ -82,6 +86,23 @@ void compute_drop_detect(void) {
     break;
 
   case FREE_FALL_LATCHED:
+    // Delay for the minimum trigger time.
+    trigger_count++;
+    if (trigger_count >= MIN_RESET_SAMPLES) {
+      detect_state = FREE_FALL_DELATCH;
+    }
+    break;
+
+  case FREE_FALL_DELATCH:
+    // Trigger GPIO low.
+    HAL_GPIO_WritePin(DROP_DETECT_GPIO_PORT, DROP_DETECT_GPIO_PIN,
+                      GPIO_PIN_RESET);
+
+    detect_state = PENDING_IMPACT;
+    pending_reset_count = 0;
+    break;
+
+  case PENDING_IMPACT:
     // Impact detection.
     if (g_mag > IMPACT_G_THRESH) {
 
@@ -91,30 +112,30 @@ void compute_drop_detect(void) {
 #endif
 
       detect_state = IMPACT_LANDED;
+      pending_reset_count = 0;
     }
 
     // Check for drop detect full system reset condition.
-    trigger_count++;
-    if (trigger_count >= MIN_RESET_SAMPLES) {
+    pending_reset_count++;
+    if (pending_reset_count >= TICKS_TILL_RESET) {
       detect_state = DROP_DETECT_RESET;
     }
-
     break;
 
   case IMPACT_LANDED:
-    // TODO: Logic here.
-
-    // Move to reset.
-    detect_state = DROP_DETECT_RESET;
-
+    // Wait for fix time until reset.
+    pending_reset_count++;
+    if (pending_reset_count >= TICKS_TILL_RESET) {
+      detect_state = DROP_DETECT_RESET;
+    }
     break;
 
   case DROP_DETECT_RESET:
-    // Trigger GPIO low.
-    HAL_GPIO_WritePin(DROP_DETECT_GPIO_PORT, DROP_DETECT_GPIO_PIN,
-                      GPIO_PIN_RESET);
+    ws2812b_set_colour(0, 2, 1, 3); // Init colour.
+    ws2812b_update();
 
     trigger_count = 0;
+    pending_reset_count = 0;
     low_g_count = 0;
     detect_state = FREE_FALL_IDLE;
     break;
