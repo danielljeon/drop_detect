@@ -1,6 +1,7 @@
 # drop_detect
 
 ![arm_gcc_build](https://github.com/danielljeon/drop_detect/actions/workflows/arm_gcc_build.yaml/badge.svg)
+![black_formatter](https://github.com/danielljeon/drop_detect/actions/workflows/black_formatter.yaml/badge.svg)
 
 Soldering iron drop-triggered shield for real time embedded systems university
 course (firmware).
@@ -18,6 +19,11 @@ course (firmware).
     * [1.3 Pin Configurations](#13-pin-configurations)
     * [1.4 Clock Configurations](#14-clock-configurations)
   * [2 FreeRTOS](#2-freertos)
+  * [3 Real Time Analysis](#3-real-time-analysis)
+    * [3.1 Setup](#31-setup)
+    * [3.2 Install Python (pip) Packages](#32-install-python-pip-packages)
+    * [3.3 Running the Code](#33-running-the-code)
+  * [4 Third-Party Licenses](#4-third-party-licenses)
 <!-- TOC -->
 
 </details>
@@ -86,4 +92,60 @@ course (firmware).
 ## 2 FreeRTOS
 
 The `SYS` Timebase Source is set to `TIM16` in order to free `SysTick` for
-the FreeRTOS kernal. 
+the FreeRTOS kernal.
+
+---
+
+## 3 Real Time Analysis
+
+To support additional real time analysis a python statistical
+script ([real_time_analysis.py](docs/python/real_time_analysis.py)) was created,
+found in [python](docs/python).
+
+The script accepts a `.csv` file of raw logic analyser data exported
+from [Saleae Logic 2](https://www.saleae.com/downloads/) for a single channel.
+
+
+> Saleae is a trademark of the respective owners. Use of these names does
+> **not** imply any endorsement by the trademark holders.
+
+### 3.1 Setup
+
+- Assumes python environment is already setup (Python `3.10` or newer).
+
+### 3.2 Install Python (pip) Packages
+
+- Install packages your preferred way. If using pip, use the generic command
+  below with [requirements.txt](docs/python/requirements.txt):
+
+```shell
+pip install -r requirements.txt
+```
+
+### 3.3 Running the Code
+
+The main code can be run right off of `main.py`:
+
+```shell
+python real_time_analysis.py
+```
+
+---
+
+## 4 Third-Party Licenses
+
+This project uses the following open-source software components:
+
+- **CEVA [sh2](https://github.com/ceva-dsp/sh2)**, CEVA Inc.
+    - Licensed under the `Apache License, Version 2.0`.
+        - See [
+          `NOTICE.txt`](https://github.com/ceva-dsp/sh2/blob/main/NOTICE.txt)
+          and code headers, for example in: [
+          `sh2.h`](https://github.com/ceva-dsp/sh2/blob/main/sh2.h).
+
+- **STM32Cube HAL**, STMicroelectronics.
+    - Licensed under the `3-Clause BSD License`.
+        - See [`LICENSE.txt`](Drivers/STM32L4xx_HAL_Driver/LICENSE.txt).
+
+> CEVA and STMicroelectronics are trademarks of their respective owners. Use of
+> these names does **not** imply any endorsement by the trademark holders.
