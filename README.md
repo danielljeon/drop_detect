@@ -33,6 +33,8 @@ course (firmware).
 
 ## 1 Overview
 
+![30fps rec 120fps.gif](docs/30fps%20rec%20120fps.gif)
+
 ### 1.1 Bill of Materials (BOM)
 
 | Manufacturer Part Number | Manufacturer            | Description             | Quantity | Notes |
