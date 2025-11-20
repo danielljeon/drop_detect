@@ -18,7 +18,8 @@ course (firmware).
     * [1.2 Block Diagram](#12-block-diagram)
     * [1.3 Pin Configurations](#13-pin-configurations)
     * [1.4 Clock Configurations](#14-clock-configurations)
-  * [2 FreeRTOS](#2-freertos)
+  * [2 Software Logic](#2-software-logic)
+    * [2.1 FreeRTOS](#21-freertos)
   * [3 Real Time Analysis](#3-real-time-analysis)
     * [3.1 Setup](#31-setup)
     * [3.2 Install Python (pip) Packages](#32-install-python-pip-packages)
@@ -34,10 +35,11 @@ course (firmware).
 
 ### 1.1 Bill of Materials (BOM)
 
-| Manufacturer Part Number | Manufacturer       | Description             | Quantity | Notes |
-|--------------------------|--------------------|-------------------------|---------:|-------|
-| STM32L432KC              | STMicroelectronics | 32-bit MCU              |        1 |       |
-| WS2812B                  | (Various)          | PWM Addressable RGB LED |        1 |       |
+| Manufacturer Part Number | Manufacturer            | Description             | Quantity | Notes |
+|--------------------------|-------------------------|-------------------------|---------:|-------|
+| STM32L432KC              | STMicroelectronics      | 32-bit MCU              |        1 |       |
+| WS2812B                  | (Various)               | PWM Addressable RGB LED |        1 |       |
+| BNO085 or BNO086         | CEVA Technologies, Inc. | 9-DOF IMU               |        1 |       |
 
 ### 1.2 Block Diagram
 
@@ -89,7 +91,11 @@ course (firmware).
 
 ---
 
-## 2 FreeRTOS
+## 2 Software Logic
+
+![drop_detect_logic.drawio.png](docs/drop_detect_logic.drawio.png)
+
+### 2.1 FreeRTOS
 
 The `SYS` Timebase Source is set to `TIM16` in order to free `SysTick` for
 the FreeRTOS kernal.
