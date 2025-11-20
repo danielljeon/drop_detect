@@ -71,7 +71,7 @@ void compute_drop_detect(void) {
                           GPIO_PIN_SET);
 
 #ifdef DROP_DETECT_USE_STATUS_LED
-        ws2812b_set_colour(0, 3, 0, 0); // Red.
+        ws2812b_set_colour(0, 255, 0, 0); // Red.
         ws2812b_update();
 #endif
 
@@ -107,7 +107,7 @@ void compute_drop_detect(void) {
     if (g_mag > IMPACT_G_THRESH) {
 
 #ifdef DROP_DETECT_USE_STATUS_LED
-      ws2812b_set_colour(0, 0, 3, 0); // Green.
+      ws2812b_set_colour(0, 0, 255, 0); // Green.
       ws2812b_update();
 #endif
 
