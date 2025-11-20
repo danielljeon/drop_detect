@@ -34,10 +34,10 @@ course (firmware).
 
 ### 1.1 Bill of Materials (BOM)
 
-| Manufacturer Part Number | Manufacturer                         | Description                 | Quantity | Notes |
-|--------------------------|--------------------------------------|-----------------------------|---------:|-------|
-| NUCLEO-L432KC            | STMicroelectronics                   | 32-bit MCU Nucleo Dev Board |        1 |       |
-| Adafruit BNO085 board    | CEVA Technologies, Inc. via Adafruit | 9-DOF IMU Adafruit board    |        1 |       |
+| Manufacturer Part Number | Manufacturer       | Description             | Quantity | Notes |
+|--------------------------|--------------------|-------------------------|---------:|-------|
+| STM32L432KC              | STMicroelectronics | 32-bit MCU              |        1 |       |
+| WS2812B                  | (Various)          | PWM Addressable RGB LED |        1 |       |
 
 ### 1.2 Block Diagram
 
