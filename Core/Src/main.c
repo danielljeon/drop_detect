@@ -26,6 +26,9 @@
 #include "configuration.h"
 #include "drop_detect.h"
 #include "ws2812b_hal_pwm.h"
+#if !DROP_DETECT_USE_FREERTOS
+#include "scheduler.h"
+#endif
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -178,10 +181,15 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+#else
+  scheduler_init(); // Initialize scheduler.
+  scheduler_add_task(bno085_run, 1);
+  scheduler_add_task(compute_drop_detect, 5);
 #endif
 
   while (1) {
 #if !DROP_DETECT_USE_FREERTOS
+    scheduler_run(); // Run the scheduler.
 #endif
     /* USER CODE END WHILE */
 

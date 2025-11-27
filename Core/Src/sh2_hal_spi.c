@@ -245,9 +245,7 @@ static int sh2_spi_hal_open(sh2_Hal_t *self) {
   }
   is_open = true; // Define open instance.
 
-  // Enable hardware (timer).
-  __HAL_TIM_ENABLE(&SH2_HTIM);
-  HAL_TIM_Base_Init(&SH2_HTIM);
+  // TODO: DEV NOTE: Timer initialization completed by SH2 (TIM owner).
   HAL_TIM_Base_Start(&SH2_HTIM);
 
   // Initialize pin states.
