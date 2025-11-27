@@ -33,7 +33,10 @@ course (firmware).
 
 ## 1 Overview
 
-![30fps rec 120fps.gif](docs/30fps%20rec%20120fps.gif)
+<div align="center">
+  <img src="docs/30fps rec 120fps.gif" width="50%"><br>
+    Free fall triggered shield and impact detection example.
+</div>
 
 ### 1.1 Bill of Materials (BOM)
 
