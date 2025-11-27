@@ -23,6 +23,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "bno085_runner.h"
+#include "configuration.h"
 #include "drop_detect.h"
 #include "ws2812b_hal_pwm.h"
 /* USER CODE END Includes */
@@ -132,6 +133,8 @@ int main(void)
   bno085_init();
 
   HAL_Delay(1000); // TODO: Weird behaviour, might be related to IMU settling.
+
+#if DROP_DETECT_USE_FREERTOS
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -175,7 +178,11 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+#endif
+
   while (1) {
+#if !DROP_DETECT_USE_FREERTOS
+#endif
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
