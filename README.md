@@ -69,7 +69,7 @@ course (firmware).
 | PB3         | `SYS_JTDO-SWO`          |                       | Onboard ST-Link                  |                                       |
 | PA14        | `SYS_JTCK-SWCLK`        |                       | Onboard ST-Link                  |                                       |
 | PA13        | `SYS_JTMS-SWDIO`        |                       | Onboard ST-Link                  |                                       |
-|             | `TIM2_CH1`              | PWM no output         |                                  | BNO085 SH2 driver timer.              |
+|             | `TIM2_CH1`              | PWM no output         |                                  | Scheduler, BNO085 SH2 driver timer.   |
 | PA5         | `SPI1_SCK`              |                       | BNO085 Pin 19: `H_SCL/SCK/RX`    |                                       |
 | PA4         | `GPIO_Output` (SPI1 CS) | Set high              | BNO085 Pin 18: `H_CSN`           |                                       |
 | PA6         | `SPI1_MISO`             |                       | BNO085 Pin 20: `H_SDA/H_MISO/TX` |                                       |
