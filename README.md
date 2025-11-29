@@ -19,7 +19,7 @@ course (firmware).
     * [1.3 Pin Configurations](#13-pin-configurations)
     * [1.4 Clock Configurations](#14-clock-configurations)
   * [2 Software Logic](#2-software-logic)
-    * [2.1 Scheduling (FreeRTOS vs Custom)](#21-scheduling-freertos-vs-custom)
+    * [2.1 Scheduling (FreeRTOS vs Cyclic Executive)](#21-scheduling-freertos-vs-cyclic-executive)
   * [3 Real Time Analysis](#3-real-time-analysis)
     * [3.1 Setup](#31-setup)
     * [3.2 Install Python (pip) Packages](#32-install-python-pip-packages)
@@ -100,12 +100,12 @@ course (firmware).
 
 ![drop_detect_logic.drawio.png](docs/drop_detect_logic.drawio.png)
 
-### 2.1 Scheduling (FreeRTOS vs Custom)
+### 2.1 Scheduling (FreeRTOS vs Cyclic Executive)
 
 Two scheduling configurations can be utilized:
 
 1. FreeRTOS implemented and configured with `STM32CubeMX`.
-2. A basic custom timer based scheduler.
+2. A basic cyclic executive hardware timer based scheduler.
 
 Option 1 (FreeRTOS) is utilized for scheduling by default.
 
@@ -116,8 +116,8 @@ macro:
 #define DROP_DETECT_USE_FREERTOS 1
 ```
 
-By changing this macro from `1` to `0`, the custom scheduler is enabled and
-FreeRTOS initialization is disabled.
+By changing this macro from `1` to `0`, the cyclic executive scheduler is
+enabled and FreeRTOS initialization and operation is disabled.
 
 > Note: The `SYS` Timebase Source is set to `TIM16` in order to free `SysTick`
 > for the FreeRTOS kernal.
